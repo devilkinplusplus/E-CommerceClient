@@ -7,6 +7,7 @@ import { UiModule } from './ui/ui.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,8 +19,11 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgxSpinnerModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    { provide: 'baseUrl', useValue: 'https://localhost:7162/api', multi: true }, //! Url-ı vahid bir yerdən çəkmək üçün buraya qeyd etdim
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

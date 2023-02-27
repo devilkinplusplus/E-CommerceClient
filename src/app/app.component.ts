@@ -8,3 +8,6 @@ declare var $: any; //! Jquery-e .ts filendan çatmaq üçün
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {}
+$.get('https://localhost:7162/api/Categories/GetCategories',data=>{
+  console.log(data);
+});
