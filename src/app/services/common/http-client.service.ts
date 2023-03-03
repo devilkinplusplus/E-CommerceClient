@@ -33,18 +33,23 @@ export class HttpClientService {
     if (requestParameter.fullEndPoint) {
       url = requestParameter.fullEndPoint;
     } else {
-      url = `${this.url(requestParameter)}${id ? `/${id}` : ''}`; //* Get istəyinin id alıb-almamasını yoxla və url-i müəyyən et
+       //* Get istəyinin id və queryString alıb-almamasını yoxla və url-i müəyyən et
+
+      url = `${this.url(requestParameter)}${id ? `/${id}` : ''}${requestParameter.queryString ? `?${requestParameter.queryString}`: ''}`.replace(/\s/g, "");
     }
     return this.httpClient.get<T>(url, { headers: requestParameter.headers });
   }
 
-  post<T>( requestParameter: Partial<RequestParameters>,body: Partial<T>): Observable<T> {
+  post<T>(
+    requestParameter: Partial<RequestParameters>,
+    body: Partial<T>
+  ): Observable<T> {
     let url: string = '';
 
     if (requestParameter.fullEndPoint) {
       url = requestParameter.fullEndPoint;
     } else {
-      url = `${this.url(requestParameter)}`;
+      url = `${this.url(requestParameter)}${requestParameter.queryString ? `?${requestParameter.queryString}`: ''}`;
     }
 
     return this.httpClient.post<T>(url, body, {
@@ -61,7 +66,7 @@ export class HttpClientService {
     if (requestParameter.fullEndPoint) {
       url = requestParameter.fullEndPoint;
     } else {
-      url = `${this.url(requestParameter)}`;
+      url = `${this.url(requestParameter)}${requestParameter.queryString ? `?${requestParameter.queryString}`: ''}`;
     }
 
     return this.httpClient.put<T>(url, body, {
@@ -78,7 +83,7 @@ export class HttpClientService {
     if (requestParameter.fullEndPoint) {
       url = requestParameter.fullEndPoint;
     } else {
-      url = `${this.url(requestParameter)}/${id}`;
+      url = `${this.url(requestParameter)}/${id}${requestParameter.queryString ? `?${requestParameter.queryString}`: ''}`;
     }
 
     return this.httpClient.delete<T>(url, {
@@ -90,7 +95,9 @@ export class HttpClientService {
 export class RequestParameters {
   controller?: string;
   action?: string;
-  headers?: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  headers?: HttpHeaders;
+  queryString?: string;
+
   baseUrl?: string; //* Fərqli baseUrl istifadə edilərsə, lazım ola bilər
   fullEndPoint?: string; //* Tamam fərqli bir endpointə istək göndərilərsə deyə
   responseType?: string = 'json';

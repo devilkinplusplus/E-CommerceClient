@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { BaseComponent } from '../../../../base/base.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ProductService } from 'src/app/services/common/models/product.service';
@@ -8,6 +8,7 @@ import {
   MessagePosition,
   MessageType,
 } from '../../../../services/admin/alertify.service';
+import { outputAst } from '@angular/compiler';
 
 @Component({
   selector: 'app-product-create',
@@ -23,6 +24,8 @@ export class ProductCreateComponent extends BaseComponent {
     super(spinner);
   }
 
+  @Output() newProduct :EventEmitter<CreateProduct> = new EventEmitter<CreateProduct>();
+
   create(
     title: HTMLInputElement,
     desc: HTMLTextAreaElement,
@@ -36,13 +39,26 @@ export class ProductCreateComponent extends BaseComponent {
     createProduct.price = parseFloat(price.value);
     createProduct.stock = parseInt(stock.value);
 
-    this.productService.createProduct(createProduct, () => {
-      this.hideSpinner();
-      this.alertify.message('Successfully created', {
-        messageType: MessageType.Success,
-        dissmissOthers: true,
-        position: MessagePosition.TopRight,
-      });
-    });
+    this.productService.createProduct(
+      createProduct,
+      () => {
+        this.hideSpinner();
+        this.alertify.message('Successfully created', {
+          messageType: MessageType.Success,
+          dissmissOthers: true,
+          position: MessagePosition.TopRight,
+        });
+
+        //! Product yaradılanda table-da avtomatik güncellenmesi üçün list componentine gönderdim
+        this.newProduct.emit(createProduct);
+      },
+      (errorMessage) => {
+        this.alertify.message(errorMessage, {
+          dissmissOthers: true,
+          position: MessagePosition.TopRight,
+          messageType: MessageType.Error,
+        });
+      }
+    );
   }
 }
