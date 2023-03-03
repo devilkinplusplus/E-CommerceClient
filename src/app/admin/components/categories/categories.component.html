@@ -1,1 +1,8 @@
-<p>categories works!</p>
+<mat-drawer-container class="categories-container">
+  <mat-drawer mode="side" opened class="categories-left-sidenav">
+    <app-category-create></app-category-create>
+  </mat-drawer>
+  <mat-drawer-content>
+    <app-category-list></app-category-list>
+  </mat-drawer-content>
+</mat-drawer-container>

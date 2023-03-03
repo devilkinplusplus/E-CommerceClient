@@ -9,7 +9,7 @@ import { Category } from '../../../contracts/category';
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
 })
-export class CategoriesComponent extends BaseComponent {
+export class CategoriesComponent extends BaseComponent implements OnInit {
   constructor(
     spinner: NgxSpinnerService,
     private httpClient: HttpClientService
@@ -18,18 +18,25 @@ export class CategoriesComponent extends BaseComponent {
   }
 
   ngOnInit(): void {
-    this.httpClient
-      .get<Category[]>({
-        controller: 'categories',
-        action: 'get',
-      })
-      .subscribe((data) => console.log(data));
+    // this.httpClient
+    //   .get<Category[]>({
+    //     controller: 'categories',
+    //     action: 'get',
+    //   })
+    //   .subscribe((data) => console.log(data));
 
-    // this.httpClient.post({
-    //   controller: 'categories',
-    //   action: 'post',
-    // },{
-    //   name:"Tv"
-    // }).subscribe();
+    // this.httpClient
+    //   .post(
+    //     {
+    //       controller: 'categories',
+    //       action: 'post',
+    //     },
+    //     {
+    //       name: 'Tv',
+    //     }
+    //   )
+    //   .subscribe();
+
+   
   }
 }
