@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Diqqət!</h1>
+<div mat-dialog-content>
+    <p>Silmək istədiyinizə əminsiniz?</p>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Ləğv Et</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Sil</button>
+</div>

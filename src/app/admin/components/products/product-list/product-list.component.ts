@@ -11,12 +11,14 @@ import {
 } from '../../../../services/admin/alertify.service';
 import { MatPaginator } from '@angular/material/paginator';
 
+declare var $: any; //! for using jquery
+
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent extends BaseComponent implements OnInit{
+export class ProductListComponent extends BaseComponent implements OnInit {
   constructor(
     private productService: ProductService,
     spinner: NgxSpinnerService,
@@ -25,7 +27,14 @@ export class ProductListComponent extends BaseComponent implements OnInit{
     super(spinner);
   }
 
-  displayedColumns: string[] = ['title', 'stock', 'price', 'date'];
+  displayedColumns: string[] = [
+    'title',
+    'stock',
+    'price',
+    'date',
+    'edit',
+    'delete',
+  ];
   dataSource: MatTableDataSource<ListProduct> = null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,8 +63,10 @@ export class ProductListComponent extends BaseComponent implements OnInit{
     await this.getProducts();
   }
 
-  async onPageChange(){
+  async onPageChange() {
     await this.getProducts();
   }
 
+ 
+  
 }
