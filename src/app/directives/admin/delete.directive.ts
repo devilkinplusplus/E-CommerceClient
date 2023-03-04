@@ -31,11 +31,10 @@ export class DeleteDirective {
     private alertify: AlertifyService
   ) {
     //! sehife render edilerken <i> elementini yaratmaq üçün
-
     const i = _renderer.createElement('i');
     i.setAttribute('class', 'fas fa-trash');
     i.setAttribute('style', 'cursor:pointer;');
-    _renderer.appendChild(element.nativeElement, i); //! td elementine <i><i/> tagini elave et
+    _renderer.appendChild(element.nativeElement, i); //! td elementine <i></i> tagini elave et
   }
 
   //*Gönderilen id-ni tut

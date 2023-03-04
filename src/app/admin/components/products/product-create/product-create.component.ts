@@ -8,7 +8,7 @@ import {
   MessagePosition,
   MessageType,
 } from '../../../../services/admin/alertify.service';
-import { outputAst } from '@angular/compiler';
+import { FileUploadOptions } from '../../../../services/common/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-product-create',
@@ -22,6 +22,14 @@ export class ProductCreateComponent extends BaseComponent {
     private alertify: AlertifyService
   ) {
     super(spinner);
+  }
+
+  @Output() fileUploadOptions: Partial<FileUploadOptions> = {
+    controller: "products",
+    action: "upload",
+    isAdminPage: true,
+    explanation: "Məhsul üçün şəkil seçin",
+    accept:".png, .jpg, .jpeg"
   }
 
   @Output() newProduct :EventEmitter<CreateProduct> = new EventEmitter<CreateProduct>();
