@@ -13,6 +13,7 @@ import { DeleteDialogComponent, DeleteState } from '../../dialogs/delete-dialog/
 import { async, firstValueFrom } from 'rxjs';
 import { HttpClientService } from '../../services/common/http-client.service';
 import { AlertifyService, MessagePosition, MessageType } from '../../services/admin/alertify.service';
+import { DialogService } from '../../services/common/dialog.service';
 
 
 declare var $: any;
@@ -28,7 +29,8 @@ export class DeleteDirective {
     private _renderer: Renderer2,
     private httpClientService: HttpClientService,
     public dialog: MatDialog,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private dialogService: DialogService
   ) {
     //! sehife render edilerken <i> elementini yaratmaq üçün
     const i = _renderer.createElement('i');
@@ -45,46 +47,64 @@ export class DeleteDirective {
   @HostListener('click') //!metod bu directive-in çağırıldığı elementə click edilərkən tetiklensin
   async onClick() {
 
-    this.openDialog(async () => {
-      const td: HTMLTableCellElement = this.element.nativeElement;
+    this.dialogService.openDialog({
+      componentType: DeleteDialogComponent,
+      data: DeleteState.Yes,
+      afterClosed: async () => {
+        const td: HTMLTableCellElement = this.element.nativeElement;
 
-      await this.httpClientService.delete({
-        controller: this.controller
-      }, this.id).subscribe((data) => {
+        await this.httpClientService.delete({
+          controller: this.controller
+        }, this.id).subscribe((data) => {
 
-        $(td.parentElement).fadeOut(1500, () => {
-          this.callBack.emit(); //! silenden sonra avtomatik olaraq cedvelin guncellenmesi üçün
-          this.alertify.message("Məlumat uğurla silindi", {
-            messageType: MessageType.Success,
-            dissmissOthers: true,
-            position: MessagePosition.TopRight
+          $(td.parentElement).fadeOut(1500, () => {
+            this.callBack.emit(); //! silenden sonra avtomatik olaraq cedvelin guncellenmesi üçün
+            this.alertify.message("Məlumat uğurla silindi", {
+              messageType: MessageType.Success,
+              dissmissOthers: true,
+              position: MessagePosition.TopRight
+            })
+          });
+
+        }, error => {
+          this.alertify.message("Silmə zamanı gözlənməyən xəta baş verdi", {
+            messageType: MessageType.Error,
+            position: MessagePosition.TopRight,
+            dissmissOthers: true
           })
         });
-
-      }, error => {
-        this.alertify.message("Silmə zamanı gözlənməyən xəta baş verdi", {
-          messageType: MessageType.Error,
-          position: MessagePosition.TopRight,
-          dissmissOthers: true
-        })
-      });
-
+      }
     })
 
+    //this.openDialog(async () => {
+    //  const td: HTMLTableCellElement = this.element.nativeElement;
+
+    //  await this.httpClientService.delete({
+    //    controller: this.controller
+    //  }, this.id).subscribe((data) => {
+
+    //    $(td.parentElement).fadeOut(1500, () => {
+    //      this.callBack.emit(); //! silenden sonra avtomatik olaraq cedvelin guncellenmesi üçün
+    //      this.alertify.message("Məlumat uğurla silindi", {
+    //        messageType: MessageType.Success,
+    //        dissmissOthers: true,
+    //        position: MessagePosition.TopRight
+    //      })
+    //    });
+
+    //  }, error => {
+    //    this.alertify.message("Silmə zamanı gözlənməyən xəta baş verdi", {
+    //      messageType: MessageType.Error,
+    //      position: MessagePosition.TopRight,
+    //      dissmissOthers: true
+    //    })
+    //  });
+
+    //})
+
   }
 
-  openDialog(afterClosed: any): void {
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      width: '250px',
-      data: DeleteState,
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
-      if (result.Yes == DeleteState.Yes)
-        afterClosed();
-    });
-  }
 
 
 }
