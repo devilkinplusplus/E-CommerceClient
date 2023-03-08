@@ -3,6 +3,7 @@ import { HttpClientService } from '../http-client.service';
 import { CreateProduct } from '../../../contracts/create_product';
 import { firstValueFrom, Observable } from 'rxjs';
 import { ListProduct } from '../../../contracts/list_product';
+import { ProductImages } from '../../../contracts/productImages';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -83,13 +84,44 @@ export class ProductService {
     return await products;
   }
 
-  async delete(id:string){
-    const obs : Observable<any> = this.httpClient.delete<any>({
-      controller:"products"
-    },id);
+  async delete(id: string) {
+    const obs: Observable<any> = this.httpClient.delete<any>(
+      {
+        controller: 'products',
+      },
+      id
+    );
     await firstValueFrom(obs);
   }
 
+  async readImages(
+    id: string,
+    successCallback?: () => void
+  ): Promise<ProductImages[]> {
+    const images: Observable<ProductImages[]> = this.httpClient.get<
+      ProductImages[]
+    >(
+      {
+        controller: 'products',
+        action: 'GetImages',
+      },
+      id
+    );
+    const imgs = await firstValueFrom(images);
+    successCallback();
+    return imgs;
+  }
 
-
+  async deleteImage(id: string, imageId: string, successCallBack?: () => void) {
+    const obs = this.httpClient.delete(
+      {
+        controller: 'products',
+        action: 'DeleteImage',
+        queryString: `imageId=${imageId}`,
+      },
+      id
+    );
+    await firstValueFrom(obs);
+    successCallBack();
+  }
 }

@@ -84,9 +84,7 @@ export class FileUploadComponent {
 
         });
       }
-
     })
-
 
   }
 

@@ -20,14 +20,30 @@
       <td mat-cell *matCellDef="let element">{{ element.date }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="image">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <i class="fa-solid fa-image" (click)="onAddProductImage(element.id)" style="cursor: pointer"></i>
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="edit">
-      <th mat-header-cell *matHeaderCellDef>Edit</th>
-      <td mat-cell *matCellDef="let element"><i class="fas fa-pencil"></i></td>
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <i class="fas fa-pencil" style="cursor: pointer"></i>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="delete">
-      <th mat-header-cell *matHeaderCellDef>Delete</th>
-      <td mat-cell *matCellDef="let element" appDelete [id]="element.id" [controller]="'products'" (callBack)="getProducts()">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        appDelete
+        [id]="element.id"
+        [controller]="'products'"
+        (callBack)="getProducts()"
+      >
         <!-- <i class="fas fa-trash" (click)="delete(element.id,$event)" style="cursor: pointer"></i> -->
       </td>
     </ng-container>
